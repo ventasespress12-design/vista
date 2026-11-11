@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desc_control">Permite asignar funciones a los botones del control remoto. No lee ni guarda nada de la pantalla.</string>
+</resources>
