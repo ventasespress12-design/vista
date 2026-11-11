@@ -19,15 +19,16 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Compilar Inicio TV
+      - name: Compilar Inicio TV y Teclado TV
         run: gradle assembleDebug --no-daemon
 
-      - name: Renombrar APK
+      - name: Renombrar APKs
         run: |
           mkdir salida
           cp inicio/build/outputs/apk/debug/inicio-debug.apk salida/InicioTV.apk
+          cp teclado/build/outputs/apk/debug/teclado-debug.apk salida/TecladoTV-CELULAR.apk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: InicioTV-apk
+          name: InicioTV-apks
           path: salida/*.apk
