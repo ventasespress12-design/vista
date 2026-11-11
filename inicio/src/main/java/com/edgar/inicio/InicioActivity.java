@@ -25,14 +25,14 @@ import java.util.Set;
 public class InicioActivity extends Activity {
 
     private LinearLayout raiz;
+    private ScrollView scroll;
     private List<Datos.App> apps;
     private Map<String, Datos.App> porPaquete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ScrollView scroll = new ScrollView(this);
-        scroll.setBackgroundColor(Estilo.FONDO);
+        scroll = new ScrollView(this);
         scroll.setFillViewport(true);
         raiz = new LinearLayout(this);
         raiz.setOrientation(LinearLayout.VERTICAL);
@@ -40,6 +40,7 @@ public class InicioActivity extends Activity {
         raiz.setPadding(px, py, px, py);
         scroll.addView(raiz);
         setContentView(scroll);
+        BotonesService.iniciar(this);   // lectura de botones del control (con root)
     }
 
     @Override
@@ -56,6 +57,8 @@ public class InicioActivity extends Activity {
     // ---------- Armado de la pantalla ----------
 
     private void construir() {
+        Estilo.cargar(this);
+        Estilo.ponerFondo(scroll);
         raiz.removeAllViews();
         apps = Datos.apps(this);
         porPaquete = new HashMap<>();
@@ -135,7 +138,7 @@ public class InicioActivity extends Activity {
         TextClock hora = new TextClock(this);
         hora.setFormat24Hour("HH:mm");
         hora.setFormat12Hour("HH:mm");
-        hora.setTextColor(0xFFF8FAFC);
+        hora.setTextColor(Estilo.TEXTO);
         hora.setTextSize(TypedValue.COMPLEX_UNIT_SP, 48);
         reloj.addView(hora);
         TextClock fecha = new TextClock(this);
@@ -224,14 +227,51 @@ public class InicioActivity extends Activity {
     }
 
     private void menuAjustes() {
-        String[] op = {"Configurar botones del control", "Ajustes del sistema"};
+        String[] op = {"Colores", "Teclado desde el celular", "Configurar botones del control", "Ajustes del sistema"};
         new AlertDialog.Builder(this)
                 .setTitle("Ajustes")
                 .setItems(op, (d, w) -> {
                     try {
-                        if (w == 0) startActivity(new Intent(this, ConfigControlActivity.class));
+                        if (w == 0) menuColores();
+                        else if (w == 1) menuTeclado();
+                        else if (w == 2) startActivity(new Intent(this, ConfigControlActivity.class));
                         else startActivity(new Intent(Settings.ACTION_SETTINGS));
                     } catch (Exception ignored) { }
+                })
+                .show();
+    }
+
+    private void menuColores() {
+        String[] nombres = new String[Estilo.TEMAS.length + 1];
+        for (int i = 0; i < Estilo.TEMAS.length; i++) nombres[i] = Estilo.TEMAS[i].nombre;
+        nombres[Estilo.MI_IMAGEN] = "Mi imagen… (elegir una foto)";
+        new AlertDialog.Builder(this)
+                .setTitle("Colores")
+                .setSingleChoiceItems(nombres, Estilo.temaActual(this), (d, w) -> {
+                    d.dismiss();
+                    if (w == Estilo.MI_IMAGEN) {
+                        startActivity(new Intent(this, ElegirImagenActivity.class));
+                    } else {
+                        Estilo.elegirTema(this, w);
+                        construir();
+                    }
+                })
+                .show();
+    }
+
+    private void menuTeclado() {
+        String ip = Red.ipLocal();
+        String texto = "En el celular, abrí «Teclado TV» y poné:\n\n"
+                + "IP del stick:   " + (ip == null ? "(sin WiFi)" : ip) + "\n"
+                + "Código:           " + ServidorTeclado.codigo(this) + "\n\n"
+                + "El celular tiene que estar en el mismo WiFi.";
+        new AlertDialog.Builder(this)
+                .setTitle("Teclado desde el celular")
+                .setMessage(texto)
+                .setPositiveButton("Listo", null)
+                .setNeutralButton("Cambiar código", (d, w) -> {
+                    ServidorTeclado.nuevoCodigo(this);
+                    menuTeclado();
                 })
                 .show();
     }

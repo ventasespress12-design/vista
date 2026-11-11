@@ -32,19 +32,22 @@ public final class Acciones {
         return accion;
     }
 
+    /**
+     * Abre lo pedido usando root ("am start"): Android 10 no deja que una app
+     * en segundo plano abra otras, pero con root sí se puede.
+     */
     public static void ejecutar(Context c, String accion) {
-        try {
-            if (accion.equals(INICIO)) {
-                c.startActivity(new Intent(c, InicioActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            } else if (accion.startsWith(APP)) {
-                String p = accion.substring(APP.length());
-                PackageManager pm = c.getPackageManager();
-                Intent i = pm.getLeanbackLaunchIntentForPackage(p);
-                if (i == null) i = pm.getLaunchIntentForPackage(p);
-                if (i == null) throw new IllegalStateException("no instalada");
-                c.startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        } catch (Exception e) {
+        String componente = null;
+        if (accion.equals(INICIO)) {
+            componente = c.getPackageName() + "/" + InicioActivity.class.getName();
+        } else if (accion.startsWith(APP)) {
+            String p = accion.substring(APP.length());
+            PackageManager pm = c.getPackageManager();
+            Intent i = pm.getLeanbackLaunchIntentForPackage(p);
+            if (i == null) i = pm.getLaunchIntentForPackage(p);
+            if (i != null && i.getComponent() != null) componente = i.getComponent().flattenToString();
+        }
+        if (componente == null || !Raiz.ejecutar("am start -n " + componente)) {
             Toast.makeText(c, "No se pudo: " + descripcion(c, accion), Toast.LENGTH_SHORT).show();
         }
     }

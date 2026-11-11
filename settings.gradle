@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = 'InicioTV'
-include ':inicio'
+include ':inicio', ':teclado'

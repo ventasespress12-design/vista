@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teclado TV"
+            android:textColor="#F5F5F4"
+            android:textSize="24sp" />
+
+        <!-- Conexión -->
+        <LinearLayout
+            android:id="@+id/zonaConexion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/ip"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="2"
+                android:background="@drawable/campo"
+                android:hint="IP del stick"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:paddingHorizontal="12dp"
+                android:textColor="#F5F5F4"
+                android:textColorHint="#78716C" />
+
+            <EditText
+                android:id="@+id/codigo"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/campo"
+                android:hint="Código"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:maxLength="4"
+                android:paddingHorizontal="12dp"
+                android:textColor="#F5F5F4"
+                android:textColorHint="#78716C" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnConectar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/boton"
+            android:text="Conectar"
+            android:textAllCaps="false"
+            android:textColor="#5EEAD4"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/estado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="La IP y el código están en la TV: Inicio TV → Ajustes → Teclado desde el celular."
+            android:textColor="#A8A29E"
+            android:textSize="13sp" />
+
+        <!-- Escribir -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Escribí acá: aparece en la TV mientras tipeás"
+            android:textColor="#A8A29E"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/texto"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/campo"
+            android:imeOptions="actionSend"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:paddingHorizontal="14dp"
+            android:textColor="#F5F5F4"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <Button android:id="@+id/btnBorrar" style="@style/BotonTV" android:text="⌫ Borrar" />
+            <Button android:id="@+id/btnEnter" style="@style/BotonTV" android:layout_marginStart="8dp" android:text="↵ Enter" />
+            <Button android:id="@+id/btnLimpiar" style="@style/BotonTV" android:layout_marginStart="8dp" android:text="Limpiar" />
+        </LinearLayout>
+
+        <!-- Control remoto -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Control remoto"
+            android:textColor="#A8A29E"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button android:id="@+id/btnArriba" style="@style/BotonPad" android:text="▲" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp">
+
+                <Button android:id="@+id/btnIzquierda" style="@style/BotonPad" android:text="◀" />
+                <Button android:id="@+id/btnOk" style="@style/BotonPad" android:layout_marginHorizontal="8dp" android:text="OK" />
+                <Button android:id="@+id/btnDerecha" style="@style/BotonPad" android:text="▶" />
+            </LinearLayout>
+
+            <Button android:id="@+id/btnAbajo" style="@style/BotonPad" android:text="▼" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <Button android:id="@+id/btnAtras" style="@style/BotonTV" android:text="Atrás" />
+            <Button android:id="@+id/btnInicio" style="@style/BotonTV" android:layout_marginStart="8dp" android:text="Inicio" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

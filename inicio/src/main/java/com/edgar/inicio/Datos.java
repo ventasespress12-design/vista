@@ -85,25 +85,26 @@ public final class Datos {
     }
 
     // ---------- Botones del control ----------
-    // Clave "boton_<codigo>_corto" / "boton_<codigo>_largo" → acción (ver Acciones)
+    // Se guardan por el nombre que manda el control (ej. KEY_RO, KEY_SAVE):
+    // "boton_<nombre>_corto" / "boton_<nombre>_largo" → acción (ver Acciones)
 
-    public static String accion(Context c, int codigo, boolean largo) {
-        return prefs(c).getString("boton_" + codigo + (largo ? "_largo" : "_corto"), null);
+    public static String accion(Context c, String tecla, boolean largo) {
+        return prefs(c).getString("boton_" + tecla + (largo ? "_largo" : "_corto"), null);
     }
 
-    public static void guardarAccion(Context c, int codigo, boolean largo, String accion) {
+    public static void guardarAccion(Context c, String tecla, boolean largo, String accion) {
         SharedPreferences.Editor e = prefs(c).edit();
-        String k = "boton_" + codigo + (largo ? "_largo" : "_corto");
+        String k = "boton_" + tecla + (largo ? "_largo" : "_corto");
         if (accion == null) e.remove(k); else e.putString(k, accion);
         e.apply();
     }
 
-    /** Códigos de botón que tienen alguna acción asignada. */
-    public static Set<Integer> botonesAsignados(Context c) {
-        Set<Integer> s = new HashSet<>();
+    /** Nombres de botón que tienen alguna acción asignada. */
+    public static Set<String> botonesAsignados(Context c) {
+        Set<String> s = new HashSet<>();
         for (String k : prefs(c).getAll().keySet()) {
-            if (k.startsWith("boton_")) {
-                try { s.add(Integer.parseInt(k.split("_")[1])); } catch (Exception ignored) { }
+            if (k.startsWith("boton_") && (k.endsWith("_corto") || k.endsWith("_largo"))) {
+                s.add(k.substring("boton_".length(), k.length() - "_corto".length()));
             }
         }
         return s;

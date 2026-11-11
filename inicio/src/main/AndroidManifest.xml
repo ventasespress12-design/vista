@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
@@ -9,6 +14,7 @@
         android:banner="@drawable/banner"
         android:icon="@drawable/banner"
         android:label="Inicio TV"
+        android:requestLegacyExternalStorage="true"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
 
         <activity
@@ -36,18 +42,22 @@
             android:name=".ConfigControlActivity"
             android:exported="false" />
 
-        <!-- Reasigna botones del control en cualquier pantalla (no lee la pantalla) -->
+        <activity
+            android:name=".ElegirImagenActivity"
+            android:exported="false" />
+
+        <!-- Lee los botones del control con root (este stick bloquea la accesibilidad) -->
         <service
-            android:name=".ControlService"
-            android:exported="true"
-            android:label="Inicio TV — botones del control"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:name=".BotonesService"
+            android:exported="false" />
+
+        <!-- Al prender el stick, arranca la lectura de botones -->
+        <receiver
+            android:name=".Arranque"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/control" />
-        </service>
+        </receiver>
     </application>
 </manifest>
