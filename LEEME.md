@@ -1,4 +1,4 @@
-# Inicio TV 1.4
+# Inicio TV 1.5
 
 Pantalla de inicio liviana para el TV Stick: reloj, favoritos, todas las apps, ocultar apps
 y botones del control configurables (ir a Inicio TV o abrir una app). Sin publicidad ni librerías extra.

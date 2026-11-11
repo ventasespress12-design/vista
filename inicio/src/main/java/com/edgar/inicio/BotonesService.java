@@ -93,12 +93,17 @@ public class BotonesService extends Service {
         while (activo) {
             Process p = null;
             try {
-                p = Runtime.getRuntime().exec(new String[]{"su", "-c", "getevent -lq"});
+                // "LISTO" sale apenas se obtiene root, antes de que se apriete ningún botón
+                p = Runtime.getRuntime().exec(new String[]{"su", "-c", "echo LISTO; exec getevent -lq"});
                 BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String linea;
-                boolean alguna = false;
                 while (activo && (linea = in.readLine()) != null) {
-                    if (!alguna) { alguna = true; leyendo = true; error = null; fallos = 0; }
+                    if (linea.trim().equals("LISTO")) {
+                        leyendo = true;
+                        error = null;
+                        fallos = 0;
+                        continue;
+                    }
                     procesar(linea);
                 }
             } catch (Exception e) {
